@@ -4,9 +4,9 @@
 
 ## Purpose
 
-In order to protect credentials & API keys when using data from public APIs like Flickr and Blogger, this service makes an authenticated call to the provider API and forwards only the necessary fields via a JSON to a "wrapper" call.
+In order to protect credentials & API keys when using data from public APIs like Flickr and Blogger, this service makes an authenticated call to the original endpoint and only forwards the necessary fields (JSON) in a "wrapper" call used by the frontend.
 
-By storing all the sensitive information in a separate JSON file *outside of source control*, all the Django code can be commited to GitHub including the Settings.py and views.py which are passing the API keys.
+Additionally, because all the sensitive information is kept in a separate JSON file *outside of source control*, the Django code can be safely commited to GitHub.
 
 ## Future Plans
 
