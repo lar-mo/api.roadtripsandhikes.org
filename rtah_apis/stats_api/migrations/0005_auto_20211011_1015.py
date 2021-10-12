@@ -7,14 +7,14 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0004_alter_person_join_date'),
+        ('stats_api', '0004_alter_person_join_date'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='hike',
             name='hiker',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='hikes', to='api.person'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='hikes', to='stats_api.person'),
         ),
         migrations.AlterField(
             model_name='person',

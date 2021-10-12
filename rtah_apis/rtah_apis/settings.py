@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'api_wrapper',
-    'api',
+    'stats_api',
     'rest_framework',
     'rest_framework_api_key',
     'django.contrib.admin',

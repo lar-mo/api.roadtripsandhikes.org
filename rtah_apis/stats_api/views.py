@@ -22,4 +22,4 @@ class PersonViewSet(viewsets.ModelViewSet):
 def index(request):
     # return HttpResponse("Hello world!")
     context = {}
-    return render(request, 'api/index.html', context)
+    return render(request, 'stats_api/index.html', context)

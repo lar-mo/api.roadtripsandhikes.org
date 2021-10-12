@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('highest_elev', models.IntegerField(blank=True, max_length=10)),
                 ('alltrails_url', models.URLField(blank=True, max_length=100)),
                 ('blogger_url', models.URLField(blank=True, max_length=100)),
-                ('hiker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='person_hiker', to='api.person')),
+                ('hiker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='person_hiker', to='stats_api.person')),
             ],
         ),
     ]
