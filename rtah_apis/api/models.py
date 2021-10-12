@@ -11,7 +11,7 @@ class Person(models.Model):
     last_name           = models.CharField(max_length=100, blank=False)
     join_date           = models.DateTimeField(default=timezone.now)
     email               = models.EmailField(max_length=100, blank=False)
-    profile_img         = models.ImageField(upload_to='images/%Y/%m/%d', blank=True, null=True)
+    profile_img         = models.ImageField(upload_to='static/images/%Y/%m/%d', blank=True, null=True)
 
     def __str__(self):
         return "{} {} ({})".format(self.first_name, self.last_name, self.id)
