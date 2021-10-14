@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,6 +24,7 @@ def get_secret(setting, secrets=secrets):
 def index(request):
     return HttpResponse("Hello world!")
 
+@xframe_options_exempt
 def bloggerApiGetLatestPost(request):
     blogger_apiv3 = get_secret('blogger_apiv3')
     headers = {"Referer": "https://api.roadtripsandhikes.org"}
