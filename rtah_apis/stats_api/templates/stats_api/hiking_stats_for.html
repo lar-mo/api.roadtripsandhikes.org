@@ -1,0 +1,14 @@
+{% extends 'stats_api/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<ul>
+  <li><strong>Total Hikes</strong>: {{ overalls.total_hikes }}</li>
+  <li><strong>Total Miles Hiked</strong>: {{ overalls.total_miles }}</li>
+  <li><strong>Total Elevation Gain</strong>: {{ overalls.total_elev_feet }}</li>
+  <li><strong>Highest Elevation</strong>: {{ overalls.highest_elev_feet }}</li>
+</ul>
+
+{% endblock %}

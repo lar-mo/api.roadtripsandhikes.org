@@ -11,7 +11,7 @@ router.register('persons', views.PersonViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('docs/', include('stats_api.urls')),
+    path('hiking-stats/', include('stats_api.urls')),
     path('api-auth/', include('rest_framework.urls')),
     # path('', include('api_wrapper.urls')),
     path('wrapper/', include('api_wrapper.urls')),
