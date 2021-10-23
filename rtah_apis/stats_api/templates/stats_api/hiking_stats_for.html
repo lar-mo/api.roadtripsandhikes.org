@@ -4,11 +4,12 @@
 
 {% block content %}
 
-<ul>
-  <li><strong>Total Hikes</strong>: {{ overalls.total_hikes }}</li>
-  <li><strong>Total Miles Hiked</strong>: {{ overalls.total_miles }}</li>
-  <li><strong>Total Elevation Gain</strong>: {{ overalls.total_elev_feet }}</li>
-  <li><strong>Highest Elevation</strong>: {{ overalls.highest_elev_feet }}</li>
-</ul>
+<div class="iframe_stats">
+<strong>2021</strong>
+<strong>Hikes</strong>: {{ overalls.total_hikes }}
+// <strong>Distance Hiked</strong>: {{ overalls.total_miles }} miles
+// <strong>Elevation Gain</strong>: {{ overalls.total_elev_feet }} feet
+// <strong>Highest Elevation</strong>: {{ overalls.highest_elev_feet }} feet
+</div>
 
 {% endblock %}
