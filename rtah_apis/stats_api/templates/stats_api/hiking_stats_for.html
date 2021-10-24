@@ -4,12 +4,21 @@
 
 {% block content %}
 
-<div class="iframe_stats">
+<div id="iframe_stats">
 <strong>2021</strong>
 <strong>Hikes</strong>: {{ overalls.total_hikes }}
 // <strong>Distance Hiked</strong>: {{ overalls.total_miles }} miles
 // <strong>Elevation Gain</strong>: {{ overalls.total_elev_feet }} feet
 // <strong>Highest Elevation</strong>: {{ overalls.highest_elev_feet }} feet
 </div>
+
+<script type="text/javascript">
+  let urlarg = window.location.search.substring(1);
+  let iframe_stats = document.querySelector('#iframe_stats');
+  if (urlarg == 'blog') {
+    iframe_stats.style.backgroundColor = 'rgba(255,102,51,0.0)';
+  }
+
+</script>
 
 {% endblock %}
