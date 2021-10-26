@@ -40,7 +40,12 @@ def hiking_stats_for(request, hiker_id):
     # overalls = Person.objects.get(id=hiker_id)
     # blogger_apiv3 = get_secret('blogger_apiv3')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
-    response = requests.get("http://localhost:8000/persons/" + str(hiker_id) + "/?",
+    host = request.get_host()
+    if host == 'localhost:8000':
+        host_protocol = 'http://localhost:8000'
+    else:
+        host_protocol = 'https://api.roadtripsandhikes.org'
+    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?",
         params = {
             # '': hiker_id,
             'format': 'json',
