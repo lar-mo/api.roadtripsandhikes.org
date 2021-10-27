@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.text import slugify
 
 class Person(models.Model):
     first_name          = models.CharField(max_length=100, blank=False)
     last_name           = models.CharField(max_length=100, blank=False)
+    slug                = models.SlugField()
     join_date           = models.DateTimeField(default=timezone.now)
     email               = models.EmailField(max_length=100, blank=False)
     profile_img         = models.ImageField(upload_to='static/images/%Y/%m/%d', blank=True, null=True)
@@ -13,6 +15,12 @@ class Person(models.Model):
 
     def fullname(self):
         return "{} {}".format(self.first_name, self.last_name)
+
+    # https://learndjango.com/tutorials/django-slug-tutorial
+    def save(self, *args, **kwargs):
+        value = f'{self.first_name} {self.last_name}'
+        self.slug = slugify(value)
+        super(Person, self).save(*args, **kwargs)
 
 class Hike(models.Model):
     hiker               = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='hikes')

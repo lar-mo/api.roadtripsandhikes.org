@@ -68,6 +68,41 @@ def hiking_stats_for(request, hiker_id):
         }
     return render(request, 'stats_api/hiking_stats_for.html', context)
 
+@xframe_options_exempt
+def hiking_stats_for_slug(request, hiker_slug):
+    # return HttpResponse("Hello world!")
+    # overalls = Person.objects.get(id=hiker_id)
+    # blogger_apiv3 = get_secret('blogger_apiv3')
+    # headers = {"Referer": "https://api.roadtripsandhikes.org"}
+    host = request.get_host()
+    if host == 'localhost:8000':
+        host_protocol = 'http://localhost:8000'
+    else:
+        host_protocol = 'https://api.roadtripsandhikes.org'
+    hiker_id = Person.objects.get(slug=hiker_slug).id
+    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?",
+        params = {
+            # '': hiker_id,
+            'format': 'json',
+            # 'key': blogger_apiv3,
+            # 'fetchBodies': 'true',
+            # 'fetchImages': 'true',
+            # 'maxResults': 1,
+            # 'orderBy': 'PUBLISHED',
+        },
+        # headers=headers
+    )
+    total_hikes = response.json().pop('total_hikes')
+    total_miles = response.json().pop('total_miles')
+    total_elev_feet = response.json().pop('total_elev_feet')
+    highest_elev_feet = response.json().pop('highest_elev_feet')
+    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
+    context = {
+        "hiker_id": hiker_id,
+        "overalls": overalls,
+        }
+    return render(request, 'stats_api/hiking_stats_for.html', context)
+
 ##
 ## https://stackoverflow.com/questions/24861252/django-rest-framework-foreign-keys-and-filtering
 ##

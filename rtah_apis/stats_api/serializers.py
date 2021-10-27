@@ -39,7 +39,7 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ('id','first_name','last_name','join_date','email','profile_img','hikes','total_hikes','total_miles','total_elev_feet','highest_elev_feet')
+        fields = ('id','first_name','last_name','slug','join_date','email','profile_img','hikes','total_hikes','total_miles','total_elev_feet','highest_elev_feet')
         # fields = '__all__'
 
 class HikeSerializer(serializers.ModelSerializer):
