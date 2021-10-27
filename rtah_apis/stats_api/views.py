@@ -57,15 +57,23 @@ def hiking_stats_for(request, hiker_id):
         },
         # headers=headers
     )
-    total_hikes = response.json().pop('total_hikes')
-    total_miles = response.json().pop('total_miles')
-    total_elev_feet = response.json().pop('total_elev_feet')
-    highest_elev_feet = response.json().pop('highest_elev_feet')
-    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
-    context = {
-        "hiker_id": hiker_id,
-        "overalls": overalls,
-        }
+    try:
+        total_hikes = response.json().pop('total_hikes')
+        total_miles = response.json().pop('total_miles')
+        total_elev_feet = response.json().pop('total_elev_feet')
+        highest_elev_feet = response.json().pop('highest_elev_feet')
+        overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
+        context = {
+            "hiker_id": hiker_id,
+            "overalls": overalls,
+            }
+    except:
+        overalls = {'total_hikes': 0, 'total_miles': 0, 'total_elev_feet': 0, 'highest_elev_feet': 0}
+        context = {
+            "overalls": overalls,
+            "error": "invalid_id",
+            }
+
     return render(request, 'stats_api/hiking_stats_for.html', context)
 
 @xframe_options_exempt
@@ -79,7 +87,17 @@ def hiking_stats_for_slug(request, hiker_slug):
         host_protocol = 'http://localhost:8000'
     else:
         host_protocol = 'https://api.roadtripsandhikes.org'
-    hiker_id = Person.objects.get(slug=hiker_slug).id
+    try:
+        hiker_id = Person.objects.get(slug=hiker_slug).id
+    except:
+        hiker_id = 0
+        overalls = {'total_hikes': 0, 'total_miles': 0, 'total_elev_feet': 0, 'highest_elev_feet': 0}
+        context = {
+            "overalls": overalls,
+            "error": "invalid_slug",
+            }
+        return render(request, 'stats_api/hiking_stats_for.html', context)
+
     response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?",
         params = {
             # '': hiker_id,

@@ -5,20 +5,24 @@
 {% block content %}
 
 <div id="iframe_stats">
+{% if error == "invalid_id" %}
+Invalid ID
+{% elif error == "invalid_slug" %}
+Invalid Name(Slug)
+{% else %}
 <strong>2021</strong>
 <strong>Hikes</strong>: {{ overalls.total_hikes }}
 // <strong>Distance Hiked</strong>: {{ overalls.total_miles }} miles
 // <strong>Elevation Gain</strong>: {{ overalls.total_elev_feet }} feet
 // <strong>Highest Elevation</strong>: {{ overalls.highest_elev_feet }} feet
+{% endif %}
 </div>
-
 <script type="text/javascript">
   let urlarg = window.location.search.substring(1);
   let iframe_stats = document.querySelector('#iframe_stats');
   if (urlarg) {
     iframe_stats.style.backgroundColor = urlarg;
   }
-
 </script>
 
 {% endblock %}
