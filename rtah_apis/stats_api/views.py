@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions, generics, filters
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework_api_key.permissions import HasAPIKey
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, reverse, redirect
@@ -9,9 +9,26 @@ from django_filters.rest_framework import DjangoFilterBackend
 import django_filters
 import requests
 
+import json
+import os
+from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+
 from .models import Hike, Person
 from .serializers import HikeSerializer, PersonSerializer
 from .filters import HikerFilter
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+with open(os.path.join(BASE_DIR, 'secrets.json')) as secrets_file:
+    secrets = json.load(secrets_file)
+
+def get_secret(setting, secrets=secrets):
+    """Get secret setting or fail with ImproperlyConfigured"""
+    try:
+        return secrets[setting]
+    except KeyError:
+        raise ImproperlyConfigured("Set the {} setting".format(setting))
 
 class HikeViewSet(viewsets.ModelViewSet):
     hiker = PersonSerializer
@@ -20,14 +37,14 @@ class HikeViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filter_class = HikerFilter
     # filter_fields = ('hiker__id',) # first implementation - replaced by filters.py + filter_class
-    # permission_classes = [HasAPIKey & IsAuthenticatedOrReadOnly]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ HasAPIKey | IsAuthenticated ]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.order_by('id') # this is default sort but included here for syntax only
     serializer_class = PersonSerializer
-    # permission_classes = [HasAPIKey & IsAuthenticatedOrReadOnly]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ HasAPIKey | IsAuthenticated ]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
 def index(request):
     # return HttpResponse("Hello world!")
@@ -37,25 +54,15 @@ def index(request):
 @xframe_options_exempt
 def hiking_stats_for(request, hiker_id):
     # return HttpResponse("Hello world!")
-    # overalls = Person.objects.get(id=hiker_id)
-    # blogger_apiv3 = get_secret('blogger_apiv3')
+    my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
     host = request.get_host()
     if host == 'localhost:8000':
         host_protocol = 'http://localhost:8000'
     else:
         host_protocol = 'https://api.roadtripsandhikes.org'
-    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?",
-        params = {
-            # '': hiker_id,
-            'format': 'json',
-            # 'key': blogger_apiv3,
-            # 'fetchBodies': 'true',
-            # 'fetchImages': 'true',
-            # 'maxResults': 1,
-            # 'orderBy': 'PUBLISHED',
-        },
-        # headers=headers
+    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?format=json",
+        headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
     try:
         total_hikes = response.json().pop('total_hikes')
@@ -79,8 +86,7 @@ def hiking_stats_for(request, hiker_id):
 @xframe_options_exempt
 def hiking_stats_for_slug(request, hiker_slug):
     # return HttpResponse("Hello world!")
-    # overalls = Person.objects.get(id=hiker_id)
-    # blogger_apiv3 = get_secret('blogger_apiv3')
+    my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
     host = request.get_host()
     if host == 'localhost:8000':
@@ -98,17 +104,8 @@ def hiking_stats_for_slug(request, hiker_slug):
             }
         return render(request, 'stats_api/hiking_stats_for.html', context)
 
-    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?",
-        params = {
-            # '': hiker_id,
-            'format': 'json',
-            # 'key': blogger_apiv3,
-            # 'fetchBodies': 'true',
-            # 'fetchImages': 'true',
-            # 'maxResults': 1,
-            # 'orderBy': 'PUBLISHED',
-        },
-        # headers=headers
+    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?format=json",
+        headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
     total_hikes = response.json().pop('total_hikes')
     total_miles = response.json().pop('total_miles')
