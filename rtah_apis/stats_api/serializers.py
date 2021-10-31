@@ -19,7 +19,10 @@ class PersonSerializer(serializers.ModelSerializer):
             return 0
 
     def total_elev_ft(self, obj):
-        result = self.all_hikes.filter(hiker__id=obj.id).aggregate(Sum('elevation_gain_ft'))
+        results_qs = self.all_hikes.filter(hiker__id=obj.id)
+        # r = results_qs.values_list('elevation_gain_ft', flat=True)
+        # for x in r: print(x)
+        result = results_qs.aggregate(Sum('elevation_gain_ft'))
         res = result['elevation_gain_ft__sum']
         if not res:
             return 0
