@@ -1,6 +1,7 @@
 {% extends 'stats_api/base.html' %}
 
 {% load static %}
+{% load mathfilters %}
 
 {% block content %}
 
@@ -17,11 +18,58 @@ Invalid Name(Slug)
 // <strong>Highest Elevation</strong>: {{ overalls.highest_elev_feet }} feet
 {% endif %}
 </div>
+
+<div id="fullpage_stats">
+{% if error == "invalid_id" %}
+Invalid ID
+{% elif error == "invalid_slug" %}
+Invalid Name(Slug)
+{% else %}
+  <div class="fullpg_body">
+      <div>
+        <h1>2021 Stats for {{hiker_name}}</h1>
+        <table class="stats_table">
+          <tr>
+            <th class="total_hikes">Hikes</th>
+            <th class="total_miles">Distance Hiked</th>
+            <th class="total_elev_feet">Elevation Gain</th>
+          </tr>
+          <tr>
+            <td class="total_hikes">{{ overalls.total_hikes }}</td>
+            <td class="total_miles">{{ overalls.total_miles }} miles</td>
+            <td class="total_elev_feet">{{ overalls.total_elev_feet }} feet</td>
+          </tr>
+        </table>
+        <table class="stats_table_goals">
+          <tr>
+            <th class="total_hikes">{{ 75|sub:overalls.total_hikes }}</th>
+            <th class="total_miles">{{ 500|sub:overalls.total_miles }}</th>
+            <th class="total_elev_feet">{{ 100000|sub:overalls.total_elev_feet }}</th>
+          </tr>
+          <tr>
+            <td class="sub total_hikes">to reach 75 hikes</td>
+            <td class="sub total_miles">to reach 500 miles</td>
+            <td class="sub total_elev_feet">to reach 100,000 feet</td>
+          </tr>
+        </table>
+      </div>
+  </div>
+{% endif %}
+</div>
+
 <script type="text/javascript">
   let urlarg = window.location.search.substring(1);
   let iframe_stats = document.querySelector('#iframe_stats');
+  let body = document.querySelector('body');
   if (urlarg) {
-    iframe_stats.style.backgroundColor = urlarg;
+    if (urlarg == '2021') {
+      iframe_stats.style.display = 'none';
+      fullpage_stats.style.display = 'flex';
+      body.style.backgroundColor = '#e0e0e0';
+    }
+    else {
+      iframe_stats.style.backgroundColor = urlarg;
+    }
   }
 </script>
 

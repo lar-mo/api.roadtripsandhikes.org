@@ -94,7 +94,8 @@ def hiking_stats_for_slug(request, hiker_slug):
     else:
         host_protocol = 'https://api.roadtripsandhikes.org'
     try:
-        hiker_id = Person.objects.get(slug=hiker_slug).id
+        hiker = Person.objects.get(slug=hiker_slug)
+        hiker_name = hiker.fullname()
     except:
         hiker_id = 0
         overalls = {'total_hikes': 0, 'total_miles': 0, 'total_elev_feet': 0, 'highest_elev_feet': 0}
@@ -104,7 +105,7 @@ def hiking_stats_for_slug(request, hiker_slug):
             }
         return render(request, 'stats_api/hiking_stats_for.html', context)
 
-    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?format=json",
+    response = requests.get(host_protocol + "/persons/" + str(hiker.id) + "/?format=json",
         headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
     total_hikes = response.json().pop('total_hikes')
@@ -113,7 +114,8 @@ def hiking_stats_for_slug(request, hiker_slug):
     highest_elev_feet = response.json().pop('highest_elev_feet')
     overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
     context = {
-        "hiker_id": hiker_id,
+        "hiker_id": hiker.id,
+        "hiker_name": hiker_name,
         "overalls": overalls,
         }
     return render(request, 'stats_api/hiking_stats_for.html', context)
