@@ -69,9 +69,11 @@ def hiking_stats_for(request, hiker_id):
         total_miles = response.json().pop('total_miles')
         total_elev_feet = response.json().pop('total_elev_feet')
         highest_elev_feet = response.json().pop('highest_elev_feet')
+        hiker_name = "{} {}".format(response.json().pop('first_name'), response.json().pop('last_name'))
         overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
         context = {
             "hiker_id": hiker_id,
+            "hiker_name": hiker_name,
             "overalls": overalls,
             }
     except:
