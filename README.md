@@ -59,6 +59,8 @@ The URL args are used to toggle Widget vs Full Page via when the page is loaded 
 - If a valid RGBA code, e.g. "rgba(0,0,0,1)", the widget view is return with custom color
 - If anything else, the widget view with default colors is returned
 
+Note: The widget is currently used on https://roadtripsandhikes.blogspot.com, shown under the header.
+
 The Stats API requires an API-Key or you have to be logged in as a Django Admin. 
 - An "Authorization" header can be set with value "Api-Key aA1bB2cC3.dD4eE5fF6gG7hH8iI9jJ0kK1lL2mM3nN4oO5" in Postman
 - *Do not use the Authorization > API-Key field*
