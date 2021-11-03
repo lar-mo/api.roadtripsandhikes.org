@@ -77,3 +77,4 @@ This interface supports the CRUD operations via the DRF web form and JSON.
   - Activity Type (hiking, running, horseback, mtn bike) (many-to-one)
   - Photos (many-to-one)
   - Notes
+- Add more fields to Person (tbd)
