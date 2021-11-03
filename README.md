@@ -12,6 +12,8 @@ Additionally, because all the sensitive information is kept in a separate JSON f
 
 Currently, only one API (Blogger) is configured but there are plans to incude more like Flickr, Twitter, etc. This call fetches the Latest Blog Post from https://roadtripsandhikes.blogspot.com/.
 
+Latest Blog Post: https://api.roadtripsandhikes.org/wrapper/bloggerApiGetLatestPost/
+
 ### Stats API
 
 This App is an instance of the Django Rest Framework. It was initially conceived as a way to store my own hiking stats and be able to share the details on other pages.
