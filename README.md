@@ -72,9 +72,18 @@ This interface supports the CRUD operations via the DRF web form and JSON.
   - Target: DRF UI and /hiking-stats/for/<slug or id>/?2021
 - Add more fields to Hike
   - Map coordinates
+  - Rating: 1 - 5 stars
   - Difficulty (easy, moderate, difficult, 1, 2, 3)
   - Conditions (rocky, muddy, windy, great) (many-to-one)
   - Activity Type (hiking, running, horseback, mtn bike) (many-to-one)
   - Photos (many-to-one)
   - Notes
+  - More fields from AllTrails
+    - Moving Time
+    - Total Time
+    - Average Pace
+    - Calories
 - Add more fields to Person (tbd)
+- Add more calculations in Overall Stats
+  - Average length (miles)
+  - Average elevations gain (feet)
