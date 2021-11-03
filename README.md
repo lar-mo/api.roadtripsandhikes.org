@@ -46,11 +46,11 @@ Overall Stats are calculated for each user and included in the the Person endpoi
 - "highest_elev_feet"
 
 The Overall Stats are surfaced in a web view:
-- By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?2021 - Custom CSS - full page view
-- By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?rgba(255,33,0,0.7) - (dark-orange bg, white text) - Widget view (w/ custom bg)
+- By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?2021 - Full page view w/ custom CSS
+- By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?rgba(255,33,0,0.7) - Widget view (w/ custom bg: dark-orange bg, white text)
 - By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/ - (default: black bg, white text) - Widget view
-- By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/?2021 - Custom CSS - full page view
-- By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/?2021?rgba(255,33,0,0.7) - (dark-orange bg, white text) - Widget view (w/ custom bg)
+- By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/?2021 - Full page view w/ custom CSS
+- By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/?2021?rgba(255,33,0,0.7) - Widget view (w/ custom bg: dark-orange bg, white text)
 - By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/ - (default: black bg, white text) - Widget view
 
 The URL args are used to toggle Widget vs Full Page via when the page is loaded (JavaScript).
