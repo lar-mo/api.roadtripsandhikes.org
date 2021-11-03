@@ -48,15 +48,9 @@
       }
       .stats_table, .stats_table_goals {
         width: 100%;
-        /* border: 1px solid #000;
-        border-radius: 10px; */
         padding: 25px;
         font-size: 1.4em;
-        /* https://neumorphism.io/ */
-        /* border-radius: 30px;
-        background: linear-gradient(145deg, #cacaca, #f0f0f0);
-        box-shadow:  20px 20px 60px #bebebe,
-                     -20px -20px 60px #ffffff; */
+
       }
       .stats_table td, .stats_table_goals td {
         text-align: center;
@@ -72,6 +66,24 @@
       }
       .total_miles, .total_elev_feet {
         width: 38%;
+      }
+      @media all and (min-width: 1440px) {
+        .fullpg_body {
+          width: 50vw;
+        }
+      }
+      @media all and (max-width: 1024px) {
+        .fullpg_body {
+          width: 80vw;
+        }
+      }
+      @media all and (max-width: 800px) {
+        .fullpg_body {
+          width: 90vw;
+        }
+        #fullpage_stats {
+          height: auto;
+        }
       }
     </style>
   </head>
