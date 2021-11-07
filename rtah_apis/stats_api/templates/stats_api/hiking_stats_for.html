@@ -62,10 +62,11 @@ Invalid Name(Slug)
 
 <script type="text/javascript">
   let urlarg = window.location.search.substring(1);
+  let urlParams = new URLSearchParams(urlarg);
   let iframe_stats = document.querySelector('#iframe_stats');
   let body = document.querySelector('body');
   if (urlarg) {
-    if (urlarg == '2021') {
+    if (urlParams.has('2021')) {
       iframe_stats.style.display = 'none';
       fullpage_stats.style.display = 'flex';
       body.style.backgroundColor = '#e0e0e0';

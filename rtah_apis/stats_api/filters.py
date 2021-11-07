@@ -6,11 +6,11 @@ class HikerFilter(django_filters.FilterSet):
                                              queryset=Person.objects.all())
     class Meta:
         model = Hike
-        fields = ('hiker',)
-
-# from django import template
-# register = template.Library()
-#
-# @register.filter(name='abs')
-# def abs_filter(value):
-#     return abs(value)
+        fields = {
+            'hiker': ['exact'],
+            'hike_date': ['gte', 'lte', 'exact', 'gt', 'lt'],
+            'distance_mi': ['gte', 'lte', 'exact', 'gt', 'lt'],
+            'elevation_gain_ft': ['gte', 'lte', 'exact', 'gt', 'lt'],
+            'highest_elev_ft': ['gte', 'lte', 'exact', 'gt', 'lt'],
+            'state': ['exact'],
+        }

@@ -6,30 +6,42 @@ from .models import Hike, Person
 class PersonSerializer(serializers.ModelSerializer):
     hikes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
-    all_hikes = Hike.objects.all()
     def totalhikes(self,obj):
-        result = self.all_hikes.filter(hiker__id=obj.id).aggregate(Count('id'))
+        all_hikes = Hike.objects.all()
+        year = self.context["request"].GET.get("year")
+        if year:
+            all_hikes = all_hikes.filter(hike_date__year=year)
+        result = all_hikes.filter(hiker__id=obj.id).aggregate(Count('id'))
         return result['id__count']
 
     def total_mi(self, obj):
-        result = self.all_hikes.filter(hiker__id=obj.id).aggregate(Sum('distance_mi'))
+        all_hikes = Hike.objects.all()
+        year = self.context["request"].GET.get("year")
+        if year:
+            all_hikes = all_hikes.filter(hike_date__year=year)
+        result = all_hikes.filter(hiker__id=obj.id).aggregate(Sum('distance_mi'))
         try:
             return round(result['distance_mi__sum'], 2)
         except:
             return 0
 
     def total_elev_ft(self, obj):
-        results_qs = self.all_hikes.filter(hiker__id=obj.id)
-        # r = results_qs.values_list('elevation_gain_ft', flat=True)
-        # for x in r: print(x)
-        result = results_qs.aggregate(Sum('elevation_gain_ft'))
-        res = result['elevation_gain_ft__sum']
+        all_hikes = Hike.objects.all()
+        year = self.context["request"].GET.get("year")
+        if year:
+            all_hikes = all_hikes.filter(hike_date__year=year)
+        results = all_hikes.filter(hiker__id=obj.id).aggregate(Sum('elevation_gain_ft'))
+        res = results['elevation_gain_ft__sum']
         if not res:
             return 0
         return res
 
     def highest_elev_ft(self, obj):
-        result = self.all_hikes.filter(hiker__id=obj.id).aggregate(Max('highest_elev_ft'))
+        all_hikes = Hike.objects.all()
+        year = self.context["request"].GET.get("year")
+        if year:
+            all_hikes = all_hikes.filter(hike_date__year=year)
+        result = all_hikes.filter(hiker__id=obj.id).aggregate(Max('highest_elev_ft'))
         res = result['highest_elev_ft__max']
         if not res:
             return 0

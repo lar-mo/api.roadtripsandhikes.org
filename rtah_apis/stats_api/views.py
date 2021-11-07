@@ -41,7 +41,7 @@ class HikeViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticatedOrReadOnly]
 
 class PersonViewSet(viewsets.ModelViewSet):
-    queryset = Person.objects.order_by('id') # this is default sort but included here for syntax only
+    queryset = Person.objects.all() # this is default sort but included here for syntax only
     serializer_class = PersonSerializer
     permission_classes = [ HasAPIKey | IsAuthenticated ]
     # permission_classes = [IsAuthenticatedOrReadOnly]
@@ -53,7 +53,6 @@ def index(request):
 
 @xframe_options_exempt
 def hiking_stats_for(request, hiker_id):
-    # return HttpResponse("Hello world!")
     my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
     host = request.get_host()
@@ -87,7 +86,6 @@ def hiking_stats_for(request, hiker_id):
 
 @xframe_options_exempt
 def hiking_stats_for_slug(request, hiker_slug):
-    # return HttpResponse("Hello world!")
     my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
     host = request.get_host()
