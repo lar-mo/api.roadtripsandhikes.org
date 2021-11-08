@@ -75,6 +75,7 @@ def hiking_stats_for(request, hiker_id, *args, **kwargs):
         highest_elev_feet = response.json().pop('highest_elev_feet')
         hiker_name = "{} {}".format(response.json().pop('first_name'), response.json().pop('last_name'))
         overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
+        print(year)
         context = {
             "hiker_id": hiker_id,
             "year": year,
@@ -98,7 +99,7 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
     for i in range(1970, 2050):
         if str(i) in request.GET:
             year_filter = "/?year={}&format=json".format(i)
-            year = str(i)            
+            year = str(i)
     host = request.get_host()
     if host == 'localhost:8000':
         host_protocol = 'http://localhost:8000'
@@ -113,7 +114,6 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
         context = {
             "overalls": overalls,
             "error": "invalid_slug",
-            "year": year,
             }
         return render(request, 'stats_api/hiking_stats_for.html', context)
 
@@ -128,6 +128,7 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
     context = {
         "hiker_id": hiker.id,
         "hiker_name": hiker_name,
+        "year": year,
         "overalls": overalls,
         }
     return render(request, 'stats_api/hiking_stats_for.html', context)
