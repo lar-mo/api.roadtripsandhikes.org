@@ -61,19 +61,33 @@ The URL args are used to toggle Widget vs Full Page via when the page is loaded 
 
 ### Note: The widget is currently used on https://roadtripsandhikes.blogspot.com, shown under the header.
 
-The Stats API requires an API-Key or you have to be logged in as a Django Admin. 
+The Stats API requires an API-Key or you have to be logged in as a Django Admin.
 - An "Authorization" header can be set with value "Api-Key aA1bB2cC3.dD4eE5fF6gG7hH8iI9jJ0kK1lL2mM3nN4oO5" in Postman
 - *Do not use the Authorization > API-Key field*
 
 This interface supports the CRUD operations via the DRF web form and JSON.
 (*need to verify new Hikes are created with JSON - was having issue with foreign key assignment*)
 
+In order to allow the widget to be embedded (iframe) on Blogger, I'm using "@xframe_options_exempt" decorator.
+The major browsers have increased security protections (to address clickjacking), and block content from being loaded in frames/iframes by default. The decorator gives exemption to this particular view.
+
+More Info: https://www.hackersfriend.com/articles/how-does-django-prevents-clickjacking
+
+### Date filtering
+
+- By year (this filters Hikes, hikes[], aggregates values):
+  - https://api.roadtripsandhikes.org/hikes/?hiker=1&year=2021
+  - https://api.roadtripsandhikes.org/persons/1/?year=2021
+
+- By start_date & end_date (this filters Hikes only):
+  - https://api.roadtripsandhikes.org/hikes/?hiker=1&start_date=2021-05-03&end_date=2021-06-04
+  - https://api.roadtripsandhikes.org/hikes/?hiker=1&hike_date_gte=2021-05-03&end_date=2021-06-04
+  - https://api.roadtripsandhikes.org/hikes/?hiker=1&hike_date_gte=2021-05-03&hike_date_lt=2021-06-04
+
+Note: start_date = "hike_date__gte" | end_date = "hike_date__lt"
+
 ## Future Plans
 
-- Add filtering Hikes by Year
-  - Parse Year from existing date (2021-10-11)
-  - Autogenerate and store separate Year field
-  - Target: DRF UI and /hiking-stats/for/<slug or id>/?2021
 - Add more fields to Hike
   - Map coordinates
   - Rating: 1 - 5 stars
