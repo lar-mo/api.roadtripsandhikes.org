@@ -81,10 +81,7 @@ More Info: https://www.hackersfriend.com/articles/how-does-django-prevents-click
 
 - By start_date & end_date (this filters Hikes only):
   - https://api.roadtripsandhikes.org/hikes/?hiker=1&start_date=2021-05-03&end_date=2021-06-04
-  - https://api.roadtripsandhikes.org/hikes/?hiker=1&hike_date_gte=2021-05-03&end_date=2021-06-04
-  - https://api.roadtripsandhikes.org/hikes/?hiker=1&hike_date_gte=2021-05-03&hike_date_lt=2021-06-04
-
-Note: start_date = "hike_date__gte" | end_date = "hike_date__lt"
+  - https://api.roadtripsandhikes.org/hikes/?hiker=1&hike_date__gte=2021-05-03&hike_date__lt=2021-06-04
 
 ## Future Plans
 
