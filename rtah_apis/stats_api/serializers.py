@@ -4,7 +4,15 @@ from django.db.models import Sum, Max, Count
 from .models import Hike, Person
 
 class PersonSerializer(serializers.ModelSerializer):
-    hikes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    # hikes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    def get_user_hikes(self, obj):
+        all_hikes = Hike.objects.filter(hiker__id=obj.id)
+        year = self.context["request"].GET.get("year")
+        if year:
+            all_hikes = all_hikes.filter(hike_date__year=year)
+        result = all_hikes.values_list('pk', flat=True)
+        return list(result)
 
     def totalhikes(self,obj):
         all_hikes = Hike.objects.all()
@@ -47,6 +55,7 @@ class PersonSerializer(serializers.ModelSerializer):
             return 0
         return res
 
+    hikes = serializers.SerializerMethodField('get_user_hikes')
     total_hikes = serializers.SerializerMethodField('totalhikes')
     total_miles = serializers.SerializerMethodField('total_mi')
     total_elev_feet = serializers.SerializerMethodField('total_elev_ft')
@@ -58,11 +67,12 @@ class PersonSerializer(serializers.ModelSerializer):
         # fields = '__all__'
 
 class HikeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Hike
         fields = '__all__'
         # fields = ('id', 'hike_date', 'location', 'state', 'distance_mi', 'elevation_gain_ft', 'highest_elev_ft', 'alltrails_url', 'blogger_url', 'hiker',)
 
     def to_representation(self, instance):
-        self.fields['hiker'] =  PersonSerializer(read_only=True)
+        self.fields['hiker'] = PersonSerializer(read_only=True)
         return super(HikeSerializer, self).to_representation(instance)

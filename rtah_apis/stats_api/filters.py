@@ -4,6 +4,11 @@ from .models import Hike, Person
 class HikerFilter(django_filters.FilterSet):
     hiker = django_filters.ModelChoiceFilter(field_name="hiker",
                                              queryset=Person.objects.all())
+
+    start_date = django_filters.DateFilter(field_name='hike_date', lookup_expr='gte')
+    end_date = django_filters.DateFilter(field_name='hike_date', lookup_expr='lt')
+    year = django_filters.NumberFilter(field_name='hike_date', lookup_expr='year')
+
     class Meta:
         model = Hike
         fields = {

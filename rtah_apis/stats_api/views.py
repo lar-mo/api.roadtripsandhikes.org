@@ -41,7 +41,7 @@ class HikeViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticatedOrReadOnly]
 
 class PersonViewSet(viewsets.ModelViewSet):
-    queryset = Person.objects.all() # this is default sort but included here for syntax only
+    queryset = Person.objects.order_by('id') # this is default sort but included here for syntax only
     serializer_class = PersonSerializer
     permission_classes = [ HasAPIKey | IsAuthenticated ]
     # permission_classes = [IsAuthenticatedOrReadOnly]
