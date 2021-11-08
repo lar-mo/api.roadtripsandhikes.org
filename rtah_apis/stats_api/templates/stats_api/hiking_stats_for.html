@@ -11,7 +11,7 @@ Invalid ID
 {% elif error == "invalid_slug" %}
 Invalid Name(Slug)
 {% else %}
-<strong>2021</strong>
+<strong>{{year}}</strong>
 <strong>Hikes</strong>: {{ overalls.total_hikes }}
 // <strong>Distance Hiked</strong>: {{ overalls.total_miles }} miles
 // <strong>Elevation Gain</strong>: {{ overalls.total_elev_feet }} feet
@@ -27,7 +27,7 @@ Invalid Name(Slug)
 {% else %}
   <div class="fullpg_body">
       <div>
-        <h1>2021 Stats for {{hiker_name}}</h1>
+        <h1>{{year}} Stats for {{hiker_name}}</h1>
         <table class="stats_table">
           <tr>
             <th class="total_hikes">Hikes</th>
@@ -63,16 +63,17 @@ Invalid Name(Slug)
 <script type="text/javascript">
   let urlarg = window.location.search.substring(1);
   let urlParams = new URLSearchParams(urlarg);
+  const color = window.location.search.replace("?", "").split("&")[0];
   let iframe_stats = document.querySelector('#iframe_stats');
   let body = document.querySelector('body');
   if (urlarg) {
-    if (urlParams.has('2021')) {
+    if (urlParams.has('full')) {
       iframe_stats.style.display = 'none';
       fullpage_stats.style.display = 'flex';
       body.style.backgroundColor = '#e0e0e0';
     }
     else {
-      iframe_stats.style.backgroundColor = urlarg;
+      iframe_stats.style.backgroundColor = color;
     }
   }
 </script>

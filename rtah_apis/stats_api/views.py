@@ -52,15 +52,20 @@ def index(request):
     return render(request, 'stats_api/index.html', context)
 
 @xframe_options_exempt
-def hiking_stats_for(request, hiker_id):
+def hiking_stats_for(request, hiker_id, *args, **kwargs):
     my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
+    year_filter = "/?format=json"
+    for i in range(1970, 2050):
+        if str(i) in request.GET:
+            year_filter = "/?year={}&format=json".format(i)
+            year = str(i)
     host = request.get_host()
     if host == 'localhost:8000':
         host_protocol = 'http://localhost:8000'
     else:
         host_protocol = 'https://api.roadtripsandhikes.org'
-    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + "/?format=json",
+    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + year_filter,
         headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
     try:
@@ -72,6 +77,7 @@ def hiking_stats_for(request, hiker_id):
         overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
         context = {
             "hiker_id": hiker_id,
+            "year": year,
             "hiker_name": hiker_name,
             "overalls": overalls,
             }
@@ -85,9 +91,14 @@ def hiking_stats_for(request, hiker_id):
     return render(request, 'stats_api/hiking_stats_for.html', context)
 
 @xframe_options_exempt
-def hiking_stats_for_slug(request, hiker_slug):
+def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
     my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
+    year_filter = "/?format=json"
+    for i in range(1970, 2050):
+        if str(i) in request.GET:
+            year_filter = "/?year={}&format=json".format(i)
+            year = str(i)            
     host = request.get_host()
     if host == 'localhost:8000':
         host_protocol = 'http://localhost:8000'
@@ -102,10 +113,11 @@ def hiking_stats_for_slug(request, hiker_slug):
         context = {
             "overalls": overalls,
             "error": "invalid_slug",
+            "year": year,
             }
         return render(request, 'stats_api/hiking_stats_for.html', context)
 
-    response = requests.get(host_protocol + "/persons/" + str(hiker.id) + "/?format=json",
+    response = requests.get(host_protocol + "/persons/" + str(hiker.id) + year_filter,
         headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
     total_hikes = response.json().pop('total_hikes')
