@@ -56,6 +56,7 @@ def hiking_stats_for(request, hiker_id, *args, **kwargs):
     my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
     year_filter = "/?format=json"
+    year = "All"
     for i in range(1970, 2050):
         if str(i) in request.GET:
             year_filter = "/?year={}&format=json".format(i)
@@ -75,7 +76,6 @@ def hiking_stats_for(request, hiker_id, *args, **kwargs):
         highest_elev_feet = response.json().pop('highest_elev_feet')
         hiker_name = "{} {}".format(response.json().pop('first_name'), response.json().pop('last_name'))
         overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
-        print(year)
         context = {
             "hiker_id": hiker_id,
             "year": year,
@@ -96,6 +96,7 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
     my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
     year_filter = "/?format=json"
+    year = "All"
     for i in range(1970, 2050):
         if str(i) in request.GET:
             year_filter = "/?year={}&format=json".format(i)
