@@ -13,7 +13,7 @@ Invalid Name(Slug)
 {% else %}
 <strong>{{year}}</strong>
 <strong>Hikes</strong>: {{ overalls.total_hikes }}
-// <strong>Distance Hiked</strong>: {{ overalls.total_miles }} miles
+// <strong>Distance Hiked</strong>: {{ overalls.total_miles|floatformat:1  }} miles
 // <strong>Elevation Gain</strong>: {{ overalls.total_elev_feet }} feet
 // <strong>Highest Elevation</strong>: {{ overalls.highest_elev_feet }} feet
 {% endif %}
