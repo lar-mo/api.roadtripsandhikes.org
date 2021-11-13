@@ -41,20 +41,27 @@
         box-shadow:  20px 20px 60px #bebebe,
                      -20px -20px 60px #ffffff;
       }
-      h2 {
-        display: inline;
-      }
-      h1 {
+      h1, h3 {
         padding: 0;
         text-align: center;
       }
-      .stats_table, .stats_table_goals {
-        width: 100%;
+      .header {
+        text-align: center;
+        font-weight: bold;
+        width: 33%;
+      }
+      #stats_table_goals {
+        display: none;
+      }
+      #stats_table,
+      #stats_table_goals {
         padding: 20px;
         font-size: 1.4em;
       }
-      .stats_table td, .stats_table_goals td {
+      #stats_table > div,
+      #stats_table_goals > div {
         text-align: center;
+        display: flex;
       }
       .sub {
         font-size: 0.7em;

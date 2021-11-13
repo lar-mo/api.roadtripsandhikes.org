@@ -28,33 +28,31 @@ Invalid Name(Slug)
   <div class="fullpg_body">
       <div>
         <h1>{{year}} Stats for {{hiker_name}}</h1>
-        <table class="stats_table">
-          <tr>
-            <th class="total_hikes">Hikes</th>
-            <th class="total_miles">Distance Hiked</th>
-            <th class="total_elev_feet">Elevation Gain</th>
-          </tr>
-          <tr>
-            <td class="total_hikes">{{ overalls.total_hikes }}</td>
-            <td class="total_miles">{{ overalls.total_miles|floatformat:1 }} miles</td>
-            <td class="total_elev_feet">{{ overalls.total_elev_feet }} feet</td>
-          </tr>
-        </table>
-        <table class="stats_table_goals">
-          <tr>
-            <th colspan="3"><h3>Percentage of Goals Reached</h3></th>
-          </tr>
-          <tr>
-            <th class="total_hikes">{% widthratio overalls.total_hikes 75 100 %}%</th>
-            <th class="total_miles">{% widthratio overalls.total_miles 500 100 %}%</th>
-            <th class="total_elev_feet">{% widthratio overalls.total_elev_feet 100000 100 %}%</th>
-          </tr>
-          <tr>
-            <td class="sub total_hikes">of 75 hikes</td>
-            <td class="sub total_miles">of 500 miles</td>
-            <td class="sub total_elev_feet">of 100,000 feet</td>
-          </tr>
-        </table>
+        <div id="stats_table">
+          <div>
+            <div class="total_hikes header">Hikes</div>
+            <div class="total_miles header">Distance Hiked</div>
+            <div class="total_elev_feet header">Elevation Gain</div>
+          </div>
+          <div>
+            <div class="total_hikes">{{ overalls.total_hikes }}</div>
+            <div class="total_miles">{{ overalls.total_miles|floatformat:1 }} miles</div>
+            <div class="total_elev_feet">{{ overalls.total_elev_feet }} feet</div>
+          </div>
+        </div>
+        <div id="stats_table_goals">
+          <h3>Percentage of Goals Reached</h3>
+          <div>
+            <div class="total_hikes header">{% widthratio overalls.total_hikes 75 100 %}%</div>
+            <div class="total_miles header">{% widthratio overalls.total_miles 500 100 %}%</div>
+            <div class="total_elev_feet header">{% widthratio overalls.total_elev_feet 100000 100 %}%</div>
+          </div>
+          <div>
+            <div class="sub total_hikes">of 75 hikes</div>
+            <div class="sub total_miles">of 500 miles</div>
+            <div class="sub total_elev_feet">of 100,000 feet</div>
+          </div>
+        </div>
       </div>
   </div>
 {% endif %}
@@ -65,12 +63,16 @@ Invalid Name(Slug)
   let urlParams = new URLSearchParams(urlarg);
   const color = window.location.search.replace("?", "").split("&")[0];
   let iframe_stats = document.querySelector('#iframe_stats');
+  let stats_table_goals = document.querySelector('#stats_table_goals');
   let body = document.querySelector('body');
   if (urlarg) {
     if (urlParams.has('full')) {
       iframe_stats.style.display = 'none';
       fullpage_stats.style.display = 'flex';
       body.style.backgroundColor = '#e0e0e0';
+      if (urlParams.has('2021') || urlParams.has('2022')) {
+        stats_table_goals.style.display = 'block';
+      }
     }
     else {
       iframe_stats.style.backgroundColor = color;
