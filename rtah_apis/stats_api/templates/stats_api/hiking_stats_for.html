@@ -43,9 +43,9 @@ Invalid Name(Slug)
         <div id="stats_table_goals">
           <h3>Percentage of Goals Reached</h3>
           <div>
-            <div class="total_hikes header">{% widthratio overalls.total_hikes 75 100 %}%</div>
-            <div class="total_miles header">{% widthratio overalls.total_miles 500 100 %}%</div>
-            <div class="total_elev_feet header">{% widthratio overalls.total_elev_feet 100000 100 %}%</div>
+            <div class="total_hikes header">{{ overalls.total_hikes_percentage }}</div>
+            <div class="total_miles header">{{ overalls.total_miles_percentage }}</div>
+            <div class="total_elev_feet header">{{ overalls.total_elev_percentage }}</div>
           </div>
           <div>
             <div class="sub total_hikes">of 75 hikes</div>

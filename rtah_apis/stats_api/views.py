@@ -122,10 +122,16 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
         headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
     total_hikes = response.json().pop('total_hikes')
+    total_hikes_percentage = str(round((total_hikes/75) * 100, 2)) + "%"
     total_miles = response.json().pop('total_miles')
+    total_miles_percentage = str(round((total_miles/500) * 100, 2)) + "%"
     total_elev_feet = response.json().pop('total_elev_feet')
+    total_elev_percentage =  str(round((total_elev_feet/100000) * 100, 2)) + "%"
+    # print("Hikes: {}".format(total_hikes_percentage))
+    # print("Miles: {}".format(total_miles_percentage))
+    # print("Elevation: {}".format(total_elev_percentage))
     highest_elev_feet = response.json().pop('highest_elev_feet')
-    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
+    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage}
     context = {
         "hiker_id": hiker.id,
         "hiker_name": hiker_name,
