@@ -121,15 +121,30 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
     response = requests.get(host_protocol + "/persons/" + str(hiker.id) + year_filter,
         headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
+
+    # This code replaces template mathfilters > widthratio which returns integers
+    #   {% widthratio overalls.total_hikes 75 100 %}%
+    #   {% widthratio overalls.total_miles 500 100 %}%
+    #   {% widthratio overalls.total_elev_feet 100000 100 %}%
+
     total_hikes = response.json().pop('total_hikes')
-    total_hikes_percentage = str(round((total_hikes/75) * 100, 2)) + "%"
+    total_hikes_pct = round((total_hikes/75) * 100, 1)
+    if total_hikes_pct.is_integer():
+        total_hikes_percentage = str(int(total_hikes_pct)) + "%"
+    else:
+        total_hikes_percentage = str(total_hikes_pct) + "%"
     total_miles = response.json().pop('total_miles')
-    total_miles_percentage = str(round((total_miles/500) * 100, 2)) + "%"
+    total_miles_pct = round((total_miles/500) * 100, 1)
+    if total_miles_pct.is_integer():
+        total_miles_percentage = str(int(total_miles_pct)) + "%"
+    else:
+        total_miles_percentage = str(total_miles_pct) + "%"
     total_elev_feet = response.json().pop('total_elev_feet')
-    total_elev_percentage =  str(round((total_elev_feet/100000) * 100, 2)) + "%"
-    # print("Hikes: {}".format(total_hikes_percentage))
-    # print("Miles: {}".format(total_miles_percentage))
-    # print("Elevation: {}".format(total_elev_percentage))
+    total_elev_pct =  round((total_elev_feet/100000) * 100, 1)
+    if total_elev_pct.is_integer():
+        total_elev_percentage = str(int(total_elev_pct)) + "%"
+    else:
+        total_elev_percentage = str(total_elev_pct) + "%"
     highest_elev_feet = response.json().pop('highest_elev_feet')
     overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage}
     context = {
