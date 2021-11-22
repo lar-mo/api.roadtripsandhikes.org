@@ -51,45 +51,9 @@ def index(request):
     context = {}
     return render(request, 'stats_api/index.html', context)
 
-@xframe_options_exempt
 def hiking_stats_for(request, hiker_id, *args, **kwargs):
-    my_hiking_stats = get_secret('my_hiking_stats')
-    # headers = {"Referer": "https://api.roadtripsandhikes.org"}
-    year_filter = "/?format=json"
-    year = "All"
-    for i in range(1970, 2050):
-        if str(i) in request.GET:
-            year_filter = "/?year={}&format=json".format(i)
-            year = str(i)
-    host = request.get_host()
-    if host == 'localhost:8000':
-        host_protocol = 'http://localhost:8000'
-    else:
-        host_protocol = 'https://api.roadtripsandhikes.org'
-    response = requests.get(host_protocol + "/persons/" + str(hiker_id) + year_filter,
-        headers={'Authorization': 'Api-Key '+my_hiking_stats}
-    )
-    try:
-        total_hikes = response.json().pop('total_hikes')
-        total_miles = response.json().pop('total_miles')
-        total_elev_feet = response.json().pop('total_elev_feet')
-        highest_elev_feet = response.json().pop('highest_elev_feet')
-        hiker_name = "{} {}".format(response.json().pop('first_name'), response.json().pop('last_name'))
-        overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet}
-        context = {
-            "hiker_id": hiker_id,
-            "year": year,
-            "hiker_name": hiker_name,
-            "overalls": overalls,
-            }
-    except:
-        overalls = {'total_hikes': 0, 'total_miles': 0, 'total_elev_feet': 0, 'highest_elev_feet': 0}
-        context = {
-            "overalls": overalls,
-            "error": "invalid_id",
-            }
-
-    return render(request, 'stats_api/hiking_stats_for.html', context)
+    hiker = Person.objects.get(id=hiker_id)
+    return hiking_stats_for_slug(request, hiker.slug)
 
 @xframe_options_exempt
 def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
@@ -122,7 +86,8 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
         headers={'Authorization': 'Api-Key '+my_hiking_stats}
     )
 
-    # This code replaces template mathfilters > widthratio which returns integers
+    # The code below replaces template > mathfilters > widthratio which returns integers
+    # e.g.
     #   {% widthratio overalls.total_hikes 75 100 %}%
     #   {% widthratio overalls.total_miles 500 100 %}%
     #   {% widthratio overalls.total_elev_feet 100000 100 %}%
@@ -133,19 +98,23 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
         total_hikes_percentage = str(int(total_hikes_pct)) + "%"
     else:
         total_hikes_percentage = str(total_hikes_pct) + "%"
+
     total_miles = response.json().pop('total_miles')
     total_miles_pct = round((total_miles/500) * 100, 1)
     if total_miles_pct.is_integer():
         total_miles_percentage = str(int(total_miles_pct)) + "%"
     else:
         total_miles_percentage = str(total_miles_pct) + "%"
+
     total_elev_feet = response.json().pop('total_elev_feet')
     total_elev_pct =  round((total_elev_feet/100000) * 100, 1)
     if total_elev_pct.is_integer():
         total_elev_percentage = str(int(total_elev_pct)) + "%"
     else:
         total_elev_percentage = str(total_elev_pct) + "%"
+
     highest_elev_feet = response.json().pop('highest_elev_feet')
+
     overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage}
     context = {
         "hiker_id": hiker.id,
