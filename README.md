@@ -44,6 +44,9 @@ Overall Stats are calculated for each user and included in the the Person endpoi
 - "total_miles"
 - "total_elev_feet"
 - "highest_elev_feet"
+- "total_hikes_percentage" (based on 75)
+- "total_miles_percentage" (based on 500)
+- "total_elev_percentage" (based on 100,000)
 
 The Overall Stats are surfaced in a web view:
 - By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?2021 - Full page view w/ custom CSS
