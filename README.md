@@ -102,3 +102,4 @@ More Info: https://www.hackersfriend.com/articles/how-does-django-prevents-click
 - Add more calculations in Overall Stats
   - Average length (miles)
   - Average elevations gain (feet)
+- Add field for Footpath trails
