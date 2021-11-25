@@ -51,12 +51,13 @@ def index(request):
     context = {}
     return render(request, 'stats_api/index.html', context)
 
-def hiking_stats_for(request, hiker_id, *args, **kwargs):
+def hiking_stats_for(request, hiker_id):
     hiker = Person.objects.get(id=hiker_id)
+    # return hiking_stats_for_slug(request, hiker_slug=hiker.slug) # when using **kwargs (line 60, 75)
     return hiking_stats_for_slug(request, hiker.slug)
 
 @xframe_options_exempt
-def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
+def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 56, 75
     my_hiking_stats = get_secret('my_hiking_stats')
     # headers = {"Referer": "https://api.roadtripsandhikes.org"}
     year_filter = "/?format=json"
@@ -71,6 +72,7 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
     else:
         host_protocol = 'https://api.roadtripsandhikes.org'
     try:
+        # hiker = Person.objects.get(slug=kwargs['hiker_slug']) # when using **kwwargs (line 56, 60)
         hiker = Person.objects.get(slug=hiker_slug)
         hiker_name = hiker.fullname()
     except:
@@ -91,6 +93,12 @@ def hiking_stats_for_slug(request, hiker_slug, *args, **kwargs):
     #   {% widthratio overalls.total_hikes 75 100 %}%
     #   {% widthratio overalls.total_miles 500 100 %}%
     #   {% widthratio overalls.total_elev_feet 100000 100 %}%
+
+    # 1. Get Total Hikes from API JSON response
+    # 2. Round to one decimal place
+    # 3. Multiply by 100
+    # 4. If float ends with 0, convert to integer
+    # 5. Convert to string and add percent symbol
 
     total_hikes = response.json().pop('total_hikes')
     total_hikes_pct = round((total_hikes/75) * 100, 1)
