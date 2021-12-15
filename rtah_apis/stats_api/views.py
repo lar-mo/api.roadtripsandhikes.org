@@ -92,7 +92,7 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
     # e.g.
     #   {% widthratio overalls.total_hikes 75 100 %}%
     #   {% widthratio overalls.total_miles 500 100 %}%
-    #   {% widthratio overalls.total_elev_feet 100000 100 %}%
+    #   {% widthratio overalls.total_elev_feet 120000 100 %}%
 
     # 1. Get Total Hikes from API JSON response
     # 2. Round to one decimal place
@@ -115,7 +115,7 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
         total_miles_percentage = str(total_miles_pct) + "%"
 
     total_elev_feet = response.json().pop('total_elev_feet')
-    total_elev_pct =  round((total_elev_feet/100000) * 100, 1)
+    total_elev_pct =  round((total_elev_feet/120000) * 100, 1)
     if total_elev_pct.is_integer():
         total_elev_percentage = str(int(total_elev_pct)) + "%"
     else:
@@ -123,7 +123,7 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
 
     highest_elev_feet = response.json().pop('highest_elev_feet')
 
-    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage}
+    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage, 'goal_hikes': 75, 'goal_miles': 500, 'goal_elevation': 120000}
     context = {
         "hiker_id": hiker.id,
         "hiker_name": hiker_name,

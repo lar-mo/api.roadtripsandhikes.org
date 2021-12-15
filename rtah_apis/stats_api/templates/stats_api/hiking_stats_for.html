@@ -48,9 +48,9 @@ Invalid Name(Slug)
             <div class="total_elev_feet header">{{ overalls.total_elev_percentage }}</div>
           </div>
           <div>
-            <div class="sub total_hikes">of 75 hikes</div>
-            <div class="sub total_miles">of 500 miles</div>
-            <div class="sub total_elev_feet">of 100,000 feet</div>
+            <div class="sub total_hikes">of {{ overalls.goal_hikes }} hikes</div>
+            <div class="sub total_miles">of {{ overalls.goal_miles }} miles</div>
+            <div class="sub total_elev_feet">of {{ overalls.goal_elevation }} feet</div>
           </div>
         </div>
       </div>
