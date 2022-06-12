@@ -109,8 +109,6 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
         miles_goal = 500
         elev_goal = 120000
 
-    print(hikes_goal, miles_goal, elev_goal)
-
     total_hikes = response.json().pop('total_hikes')
     total_hikes_pct = round((total_hikes/hikes_goal) * 100, 1)
     if total_hikes_pct.is_integer():
