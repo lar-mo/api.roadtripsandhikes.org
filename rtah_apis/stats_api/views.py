@@ -101,9 +101,9 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
     # 5. Convert to string and add percent symbol
 
     if year == "2022":
-        hikes_goal = 50
-        miles_goal = 350
-        elev_goal = 80000
+        hikes_goal = 52
+        miles_goal = 365
+        elev_goal = 84000
     else:
         hikes_goal = 75
         miles_goal = 500
