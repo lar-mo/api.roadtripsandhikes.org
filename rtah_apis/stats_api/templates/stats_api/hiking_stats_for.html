@@ -25,7 +25,7 @@ Invalid ID
 {% elif error == "invalid_slug" %}
 Invalid Name(Slug)
 {% else %}
-  <div class="fullpg_body">
+  <div id="fullpg_body">
       <div>
         <h1>{{year}} Stats for {{hiker_name}}</h1>
         <div id="stats_table">
@@ -69,7 +69,12 @@ Invalid Name(Slug)
     if (urlParams.has('full')) {
       iframe_stats.style.display = 'none';
       fullpage_stats.style.display = 'flex';
-      body.style.backgroundColor = '#e0e0e0';
+      if (urlParams.has('rtah')) {
+        body.style.backgroundColor = '';
+        fullpg_body.style.boxShadow = 'none';
+      } else {
+        body.style.backgroundColor = '#e0e0e0';
+      }
       if (urlParams.has('2021') || urlParams.has('2022')) {
         stats_table_goals.style.display = 'block';
       }
