@@ -43,6 +43,8 @@ def bloggerApiGetLatestPost(request):
     post_url = post_info_json[0]['url']
     post_title = post_info_json[0]['title']
     post_image_url = post_info_json[0]['images'][0]['url']
-    post_info = {'latest_post': {'published': post_published, 'post_url': post_url, 'title': post_title, 'image_url': post_image_url }}
+    post_location = post_info_json[0]['location']
+    post_info = {'latest_post': {'published': post_published, 'post_url': post_url, 'title': post_title, 'image_url': post_image_url,'post_location': post_location }}
     post_info_sanitized = json.dumps(post_info, indent = 4)
+
     return HttpResponse(post_info_sanitized, content_type='application/json')
