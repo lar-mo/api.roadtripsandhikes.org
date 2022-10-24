@@ -67,7 +67,7 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
             year_filter = "/?year={}&format=json".format(i)
             year = str(i)
     host = request.get_host()
-    if host == 'localhost:8000':
+    if host in ('localhost:8000', '192.168.1.81:8000'):
         host_protocol = 'http://localhost:8000'
     else:
         host_protocol = 'https://api.roadtripsandhikes.org'
