@@ -110,6 +110,9 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
         elev_goal = 120000
 
     total_hikes = response.json().pop('total_hikes')
+    total_hikes_diff = hikes_goal - total_hikes
+    if total_hikes_diff < 0:
+        total_hikes_diff = 0
     total_hikes_pct = round((total_hikes/hikes_goal) * 100, 1)
     if total_hikes_pct.is_integer():
         total_hikes_percentage = str(int(total_hikes_pct)) + "%"
@@ -117,6 +120,10 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
         total_hikes_percentage = str(total_hikes_pct) + "%"
 
     total_miles = response.json().pop('total_miles')
+    total_miles_diff = round((miles_goal - total_miles), 1)
+    # total_miles_diff = miles_goal - total_miles
+    if total_miles_diff < 0:
+        total_miles_diff = 0
     total_miles_pct = round((total_miles/miles_goal) * 100, 1)
     if total_miles_pct.is_integer():
         total_miles_percentage = str(int(total_miles_pct)) + "%"
@@ -124,6 +131,10 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
         total_miles_percentage = str(total_miles_pct) + "%"
 
     total_elev_feet = response.json().pop('total_elev_feet')
+    total_elev_diff = round((elev_goal - total_elev_feet), 0)
+    # total_elev_diff = elev_goal - total_elev_feet
+    if total_elev_diff < 0:
+        total_elev_diff = 0
     total_elev_pct =  round((total_elev_feet/elev_goal) * 100, 1)
     if total_elev_pct.is_integer():
         total_elev_percentage = str(int(total_elev_pct)) + "%"
@@ -132,7 +143,7 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
 
     highest_elev_feet = response.json().pop('highest_elev_feet')
 
-    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage, 'goal_hikes': hikes_goal, 'goal_miles': miles_goal, 'goal_elevation': elev_goal}
+    overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage, 'goal_hikes': hikes_goal, 'goal_miles': miles_goal, 'goal_elevation': elev_goal, 'total_hikes_diff': total_hikes_diff, 'total_miles_diff': total_miles_diff, 'total_elev_diff': total_elev_diff}
     context = {
         "hiker_id": hiker.id,
         "hiker_name": hiker_name,
