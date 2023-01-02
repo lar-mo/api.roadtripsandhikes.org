@@ -100,7 +100,7 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
     # 4. If float ends with 0, convert to integer
     # 5. Convert to string and add percent symbol
 
-    if year == "2022" || year == "2023":
+    if year == "2022" or year == "2023":
         hikes_goal = 52
         miles_goal = 365
         elev_goal = 84000
