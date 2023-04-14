@@ -56,16 +56,17 @@ The Overall Stats are surfaced in a web view:
   - By Shortened URL https://rtah.xyz/h/?y=2021 - redirects to https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?2021&full
 
 - Widget
-  - By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/ - Default: black bg, white text
-  - By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/ - Default: black bg, white text
+  - By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?2021 - Default: black bg, white text
+  - By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/?2021 - Default: black bg, white text
   - By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?rgba(255,33,0,0.7) - (custom colors: dark-orange bg, white text)
-  - By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/?2021?rgba(255,33,0,0.7) - (custom colors: dark-orange bg, white text)
+  - By Id https://api.roadtripsandhikes.org/hiking-stats/for/1/?2021&rgba(255,33,0,0.7) - (custom colors: dark-orange bg, white text)
+  - By Slug https://api.roadtripsandhikes.org/hiking-stats/for/larry-moiola/?linear-gradient(45deg,%20blue,%20red) - (custom gradient: blue-to-red)
 
 The URL args are used to toggle Widget vs Full Page via when the page is loaded (JavaScript).
-- If no args, the widget view with default colors is returned
-- If a valid RGBA code, e.g. "rgba(0,0,0,1)", the widget view is return with custom color
-- If "full", the full-page view is returned, *no custom colors
-- If invalid args, the widget view with default colors is returned
+- If no args, the widget view with default colors is returned; summary of all years
+- If a valid RGBA code, e.g. "rgba(0,0,0,1)", the widget view is return with custom colors
+- If "full" is included after year, the full-page view is returned, *no custom colors
+- If invalid args, the widget view with default colors is returned; summary of all years
 
 ### Note: The widget is currently used on https://roadtripsandhikes.blogspot.com, shown under the header.
 
