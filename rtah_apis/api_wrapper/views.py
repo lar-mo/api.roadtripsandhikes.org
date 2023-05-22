@@ -32,6 +32,7 @@ def bloggerApiGetLatestPost(request):
     response = requests.get("https://www.googleapis.com/blogger/v3/blogs/5929721860344397604/posts?",
         params = {
             'key': blogger_apiv3,
+            'labels': '^ Hikes',
             'fetchBodies': 'true',
             'fetchImages': 'true',
             'maxResults': 1,
