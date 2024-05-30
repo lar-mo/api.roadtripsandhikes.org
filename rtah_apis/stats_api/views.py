@@ -100,14 +100,14 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
     # 4. If float ends with 0, convert to integer
     # 5. Convert to string and add percent symbol
 
-    if year == "2022" or year == "2023" or year == "2024":
-        hikes_goal = 52
-        miles_goal = 365
-        elev_goal = 84000
-    else:
+    if year == "2021":
         hikes_goal = 75
         miles_goal = 500
         elev_goal = 120000
+    else:
+        hikes_goal = 52
+        miles_goal = 365
+        elev_goal = 84000
 
     total_hikes = response.json().pop('total_hikes')
     total_hikes_diff = hikes_goal - total_hikes
