@@ -92,6 +92,45 @@ More Info: https://www.hackersfriend.com/articles/how-does-django-prevents-click
   - https://api.roadtripsandhikes.org/hikes/?hiker=1&start_date=2021-05-03&end_date=2021-06-04
   - https://api.roadtripsandhikes.org/hikes/?hiker=1&hike_date__gte=2021-05-03&hike_date__lt=2021-06-04
 
+## Deployment (Linger + Gunicorn)
+
+This app runs on a DreamHost VPS using Gunicorn with systemd user services (Linger) for automatic startup and restart.
+
+### Service Configuration
+
+The systemd service file is located at `~/.config/systemd/user/gunicorn-api.service`:
+
+```ini
+[Unit]
+Description=Gunicorn instance for api.roadtripsandhikes.org
+After=network.target
+
+[Service]
+WorkingDirectory=/home/lar_mo/api.roadtripsandhikes.org/rtah_apis
+Environment="PATH=/home/lar_mo/api.roadtripsandhikes.org/rtah_apis/.venv/bin"
+ExecStart=/home/lar_mo/api.roadtripsandhikes.org/rtah_apis/.venv/bin/gunicorn --bind=api.roadtripsandhikes.org:8080 --timeout 120 --workers=3 --threads=3 rtah_apis.wsgi
+Restart=always
+
+[Install]
+WantedBy=default.target
+```
+
+### Useful Commands
+
+```bash
+# Check status
+systemctl --user status gunicorn-api
+
+# Restart service
+systemctl --user restart gunicorn-api
+
+# View logs
+journalctl --user -u gunicorn-api -f
+
+# Stop service
+systemctl --user stop gunicorn-api
+```
+
 ## Future Plans
 
 - Add more fields to Hike
