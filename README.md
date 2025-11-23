@@ -108,7 +108,7 @@ After=network.target
 [Service]
 WorkingDirectory=/home/lar_mo/api.roadtripsandhikes.org/rtah_apis
 Environment="PATH=/home/lar_mo/api.roadtripsandhikes.org/rtah_apis/.venv/bin"
-ExecStart=/home/lar_mo/api.roadtripsandhikes.org/rtah_apis/.venv/bin/gunicorn --bind=api.roadtripsandhikes.org:8080 --timeout 120 --workers=3 --threads=3 rtah_apis.wsgi
+ExecStart=/home/lar_mo/api.roadtripsandhikes.org/rtah_apis/.venv/bin/gunicorn --bind=api.roadtripsandhikes.org:8080 --timeout 120 --workers=1 --threads=3 --keep-alive 2 rtah_apis.wsgi
 Restart=always
 
 [Install]
