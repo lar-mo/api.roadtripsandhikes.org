@@ -37,6 +37,8 @@ CORS_ORIGIN_WHITELIST = (
        'https://www.roadtripsandhikes.org',
        'https://test.roadtripsandhikes.org',
 )
+CORS_ALLOW_CREDENTIALS = True
+CORS_REPLACE_HTTPS_REFERER = True
 
 # Application definition
 
@@ -120,6 +122,10 @@ DATABASES = {
          'USER': get_secret('MYSQL_USER'),
          'PASSWORD': get_secret('MYSQL_PWD')
      }
+     # 'default': {
+     #     'ENGINE': 'django.db.backends.sqlite3',
+     #     'NAME': BASE_DIR / 'db.sqlite3',
+     # }
  }
 
 # Password validation
