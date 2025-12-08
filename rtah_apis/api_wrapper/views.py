@@ -60,6 +60,9 @@ def bloggerApiGetLatestPost(request):
 
         return HttpResponse(post_info_sanitized, content_type='application/json')
     except Exception as e:
-        # Return error with proper CORS headers (handled by CorsMiddleware)
+        # Return error with proper CORS headers
         error_response = json.dumps({'error': 'Service temporarily unavailable', 'detail': str(e)})
-        return HttpResponse(error_response, content_type='application/json', status=503)
+        response = HttpResponse(error_response, content_type='application/json', status=503)
+        response['Access-Control-Allow-Origin'] = 'https://www.roadtripsandhikes.org'
+        response['Access-Control-Allow-Credentials'] = 'true'
+        return response
