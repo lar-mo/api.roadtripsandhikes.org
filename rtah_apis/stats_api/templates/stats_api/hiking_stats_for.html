@@ -65,6 +65,8 @@ Invalid Name(Slug)
   let iframe_stats = document.querySelector('#iframe_stats');
   let stats_table_goals = document.querySelector('#stats_table_goals');
   let body = document.querySelector('body');
+  let tooltip = document.querySelector('.tooltip');
+  let tooltiptext = document.querySelector('.tooltiptext');
   if (urlarg) {
     if (urlParams.has('full')) {
       iframe_stats.style.display = 'none';
@@ -72,6 +74,9 @@ Invalid Name(Slug)
       if (urlParams.has('flat')) {
         body.style.backgroundColor = '';
         fullpg_body.style.boxShadow = 'none';
+        tooltip.style.backgroundColor = 'none';
+        tooltiptext.style.color = '#000';
+        tooltip.style.borderColor = '#f63 transparent transparent transparent';
       } else {
         body.style.backgroundColor = '#e0e0e0';
       }

@@ -55,7 +55,7 @@ class PersonSerializer(serializers.ModelSerializer):
             return 0
         return res
 
-    hikes = serializers.SerializerMethodField('get_user_hikes')
+    # hikes = serializers.SerializerMethodField('get_user_hikes')
     total_hikes = serializers.SerializerMethodField('totalhikes')
     total_miles = serializers.SerializerMethodField('total_mi')
     total_elev_feet = serializers.SerializerMethodField('total_elev_ft')
@@ -63,7 +63,8 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ('id','first_name','last_name','slug','join_date','email','profile_img','hikes','total_hikes','total_miles','total_elev_feet','highest_elev_feet')
+        # fields = ('id','first_name','last_name','slug','join_date','email','profile_img','hikes','total_hikes','total_miles','total_elev_feet','highest_elev_feet')
+        fields = ('id','first_name','last_name','slug','join_date','email','profile_img','total_hikes','total_miles','total_elev_feet','highest_elev_feet')
         # fields = '__all__'
 
 class HikeSerializer(serializers.ModelSerializer):
