@@ -10,6 +10,7 @@ class HikerFilter(django_filters.FilterSet):
     class Meta:
         model = Hike
         fields = {
+            'id': ['exact'],
             'hiker': ['exact'],
             'hike_date': ['gte', 'lte', 'exact', 'gt', 'lt'],
             'distance_mi': ['gte', 'lte', 'exact', 'gt', 'lt'],

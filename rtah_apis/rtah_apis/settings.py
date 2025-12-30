@@ -27,7 +27,7 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','.roadtripsandhikes.org']
 
@@ -38,7 +38,6 @@ CORS_ORIGIN_WHITELIST = (
        'https://test.roadtripsandhikes.org',
 )
 CORS_ALLOW_CREDENTIALS = True
-CORS_REPLACE_HTTPS_REFERER = True
 
 # Application definition
 
@@ -63,6 +62,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50,
 }
 
 MIDDLEWARE = [
@@ -103,30 +104,26 @@ WSGI_APPLICATION = 'rtah_apis.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-# }
-
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'OPTIONS': {
-           'sql_mode': 'STRICT_ALL_TABLES',
-         },
-         'NAME': get_secret('MYSQL_DB'),
-         'HOST': get_secret('MYSQL_HOST'),
-         'PORT': '3306',
-         'USER': get_secret('MYSQL_USER'),
-         'PASSWORD': get_secret('MYSQL_PWD')
-     }
-     # 'default': {
-     #     'ENGINE': 'django.db.backends.sqlite3',
-     #     'NAME': BASE_DIR / 'db.sqlite3',
-     # }
- }
+   'default': {
+       'ENGINE': 'django.db.backends.sqlite3',
+       'NAME': BASE_DIR / 'db.sqlite3',
+   }
+}
+
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'OPTIONS': {
+#            'sql_mode': 'STRICT_ALL_TABLES',
+#          },
+#          'NAME': get_secret('MYSQL_DB'),
+#          'HOST': get_secret('MYSQL_HOST'),
+#          'PORT': '3306',
+#          'USER': get_secret('MYSQL_USER'),
+#          'PASSWORD': get_secret('MYSQL_PWD')
+#      }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

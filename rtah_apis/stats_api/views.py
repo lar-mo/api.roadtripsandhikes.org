@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, reverse, redirect
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Sum, Max, Count
 
 import django_filters
 import requests
@@ -59,50 +60,45 @@ def hiking_stats_for(request, hiker_id):
 @xframe_options_exempt
 def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 56, 75
     try:
-        my_hiking_stats = get_secret('my_hiking_stats')
-        # headers = {"Referer": "https://api.roadtripsandhikes.org"}
-        year_filter = "/?format=json"
+        # Determine year filter from query params
         year = "All"
         for i in range(1970, 2050):
             if str(i) in request.GET:
-                year_filter = "/?year={}&format=json".format(i)
                 year = str(i)
-        host = request.get_host()
-        if host in ('localhost:8000', '192.168.1.81:8000'):
-            host_protocol = 'http://localhost:8000'
-        else:
-            host_protocol = 'https://api.roadtripsandhikes.org'
+                break
+        
+        # Get hiker
         try:
-            # hiker = Person.objects.get(slug=kwargs['hiker_slug']) # when using **kwwargs (line 56, 60)
             hiker = Person.objects.get(slug=hiker_slug)
             hiker_name = hiker.fullname()
-        except:
-            hiker_id = 0
+        except Person.DoesNotExist:
             overalls = {'total_hikes': 0, 'total_miles': 0, 'total_elev_feet': 0, 'highest_elev_feet': 0}
             context = {
                 "overalls": overalls,
                 "error": "invalid_slug",
-                }
+            }
             return render(request, 'stats_api/hiking_stats_for.html', context)
 
-        response = requests.get(host_protocol + "/persons/" + str(hiker.id) + year_filter,
-            headers={'Authorization': 'Api-Key '+my_hiking_stats},
-            timeout=10
+        # Build query for hikes
+        hikes_query = Hike.objects.filter(hiker=hiker)
+        if year != "All":
+            hikes_query = hikes_query.filter(hike_date__year=year)
+
+        # Get stats with single database query
+        stats = hikes_query.aggregate(
+            total_hikes=Count('id'),
+            total_miles=Sum('distance_mi'),
+            total_elev_feet=Sum('elevation_gain_ft'),
+            highest_elev_feet=Max('highest_elev_ft')
         )
-        response.raise_for_status()
 
-        # The code below replaces template > mathfilters > widthratio which returns integers
-        # e.g.
-        #   {% widthratio overalls.total_hikes 75 100 %}%
-        #   {% widthratio overalls.total_miles 500 100 %}%
-        #   {% widthratio overalls.total_elev_feet 120000 100 %}%
+        # Extract values with defaults
+        total_hikes = stats['total_hikes'] or 0
+        total_miles = round(stats['total_miles'] or 0, 2)
+        total_elev_feet = stats['total_elev_feet'] or 0
+        highest_elev_feet = stats['highest_elev_feet'] or 0
 
-        # 1. Get Total Hikes from API JSON response
-        # 2. Round to one decimal place
-        # 3. Multiply by 100
-        # 4. If float ends with 0, convert to integer
-        # 5. Convert to string and add percent symbol
-
+        # Set goals based on year
         if year == "2021":
             hikes_goal = 75
             miles_goal = 500
@@ -112,47 +108,50 @@ def hiking_stats_for_slug(request, hiker_slug, **kwargs): # **kwargs: see lines 
             miles_goal = 365
             elev_goal = 84000
 
-        total_hikes = response.json().pop('total_hikes')
-        total_hikes_diff = hikes_goal - total_hikes
-        if total_hikes_diff < 0:
-            total_hikes_diff = 0
+        # Calculate percentages and differences
+        total_hikes_diff = max(0, hikes_goal - total_hikes)
         total_hikes_pct = round((total_hikes/hikes_goal) * 100, 1)
         if total_hikes_pct.is_integer():
             total_hikes_percentage = str(int(total_hikes_pct)) + "%"
         else:
             total_hikes_percentage = str(total_hikes_pct) + "%"
 
-        total_miles = response.json().pop('total_miles')
-        total_miles_diff = round((miles_goal - total_miles), 1)
-        # total_miles_diff = miles_goal - total_miles
-        if total_miles_diff < 0:
-            total_miles_diff = 0
+        total_miles_diff = max(0, round(miles_goal - total_miles, 1))
         total_miles_pct = round((total_miles/miles_goal) * 100, 1)
         if total_miles_pct.is_integer():
             total_miles_percentage = str(int(total_miles_pct)) + "%"
         else:
             total_miles_percentage = str(total_miles_pct) + "%"
 
-        total_elev_feet = response.json().pop('total_elev_feet')
-        total_elev_diff = round((elev_goal - total_elev_feet), 0)
-        # total_elev_diff = elev_goal - total_elev_feet
-        if total_elev_diff < 0:
-            total_elev_diff = 0
-        total_elev_pct =  round((total_elev_feet/elev_goal) * 100, 1)
+        total_elev_diff = max(0, round(elev_goal - total_elev_feet, 0))
+        total_elev_pct = round((total_elev_feet/elev_goal) * 100, 1)
         if total_elev_pct.is_integer():
             total_elev_percentage = str(int(total_elev_pct)) + "%"
         else:
             total_elev_percentage = str(total_elev_pct) + "%"
 
-        highest_elev_feet = response.json().pop('highest_elev_feet')
-
-        overalls = {'total_hikes': total_hikes, 'total_miles': total_miles, 'total_elev_feet': total_elev_feet, 'highest_elev_feet': highest_elev_feet, 'total_hikes_percentage': total_hikes_percentage, 'total_miles_percentage': total_miles_percentage, 'total_elev_percentage': total_elev_percentage, 'goal_hikes': hikes_goal, 'goal_miles': miles_goal, 'goal_elevation': elev_goal, 'total_hikes_diff': total_hikes_diff, 'total_miles_diff': total_miles_diff, 'total_elev_diff': total_elev_diff}
+        overalls = {
+            'total_hikes': total_hikes,
+            'total_miles': total_miles,
+            'total_elev_feet': total_elev_feet,
+            'highest_elev_feet': highest_elev_feet,
+            'total_hikes_percentage': total_hikes_percentage,
+            'total_miles_percentage': total_miles_percentage,
+            'total_elev_percentage': total_elev_percentage,
+            'goal_hikes': hikes_goal,
+            'goal_miles': miles_goal,
+            'goal_elevation': elev_goal,
+            'total_hikes_diff': total_hikes_diff,
+            'total_miles_diff': total_miles_diff,
+            'total_elev_diff': total_elev_diff
+        }
+        
         context = {
             "hiker_id": hiker.id,
             "hiker_name": hiker_name,
             "year": year,
             "overalls": overalls,
-            }
+        }
         return render(request, 'stats_api/hiking_stats_for.html', context)
     except Exception as e:
         # Return empty response on error - iframe will stay hidden
